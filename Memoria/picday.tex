@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{a4paper}
+%Paquetes adicionales
+\usepackage[spanish]{cleveref}
+\usepackage{titlesec}
+%Confifuración parrafos
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+%Título y autores
+\title{PicDay}
+\author{Elena Kaloyanova Popova y Andrés Plaza Hernando}
+\date{2018}
+
+%Comienzo del documento
+\begin{document}
+
+%Mostrar título e índice
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+%---------------------------------------------------------------------
+%                   Sección 1 - Manual de instalación
+%---------------------------------------------------------------------
+\section{Manual de Instalación}
+
+Manual orientado a los aspectos más técnicos de la aplicación.
+
+\subsection{Requisitos mínimos}
+A continuación se muestran los distintos requisitos para la utilización de la aplicación.
+
+\subsubsection{Versión de Android mínima}
+Se requiere el nivel de API mínima de 22, correspondiente a la versión 5.1 Marshmellow.
+
+\subsubsection{Permisos requeridos}
+La aplicación precisa de los siguientes permisos:
+\begin{itemize}
+	\item Acceso a la red.
+	\item Cámara.
+	\item Galería.
+	\item Ubicación (basada en red y GPS).
+\end{itemize}
+
+\subsubsection{Cómo instalar APK}
+Una vez comprobado que el dispositivo cumple los requisitos mínimos se puede proceder a la instalación. Para ello hay que permitir la instalación de aplicaciones de origen desconocido en nuestro dispositivo. Para ello accedemos a \textit{Ajustes} y una vez dentro a \textit{Seguridad} donde simplemente hay que marcar la casilla de \textit{Orígenes Desconocidos}.
+
+Ya puede ser instalado el archivo apk de la aplicación.
+
+\subsubsection{Cómo configurar el proyecto en Android Studio}
+Primero hay que importar el proyecto de la carpeta "`PicDay"'. Una vez importado hay que incluir las bibliotecas externas que han sido utilizadas a lo largo del desarrollo para que el proyecto compile de forma correcta. Las librerías que hay que importar son:
+
+%---------------------------------------------------------------------
+%                   Sección 2 - Manual de Usuario
+%---------------------------------------------------------------------
+\section{Manual de Usuario}
+
+Manual orientado al uso de la aplicación.
+
+\subsection{Resumen de la aplicación}
+PicDay es una aplicación de fotografía que se centra en eventos diarios o de localización. Cada día se abre un nuevo evento temático para que los usuarios suban una fotografía original relacionada con ese tema a un repositorio común de «Fotos del día», el resto de usuarios valoran las fotos y al final del día el que más puntuación haya recibido es el ganador del evento y sube en el ranking de usuarios. Hay eventos que se activan también por localización. Las fotos del respositorio se borran al acabar el día pero en el perfil de cada usuario se guardan las fotos que haya hecho y aquellas que ha marcado como favoritas.
+
+\subsection{Funcionalidades}
+A continuación se muestran las distintas funcionalidades de las que dispone nuestra app:
+
+
+%---------------------------------------------------------------------
+%                   Sección 3 - Diseño
+%---------------------------------------------------------------------
+\section{Diseño}
+%Reescribir
+En este apartado se mostrará la arquitectura de la aplicación. En primer lugar se explicarán los
+distintos casos de uso de la aplicación. A continuación, se analizarán los aspectos de la
+arquitectura desde un punto de vista más global. Finalmente, se realizará el diseño en
+profundidad de cada una de las capas de la aplicación desde una perspectiva general, tratando
+de mostrar los diagramas más generales.
+
+\subsection{Casos de uso}
+Diagramas y comentarios.
+
+\subsection{Arquitectura}
+Explicar cuál es y por qué.
+
+\subsection{Diseño de la arquitectura}
+Definir módulos y explicarlos con sus diagramas de clases.
+
+\subsection{Diagramas de secuencia}
+Añadir y comentar los diagramas de secuencia.
+
+%---------------------------------------------------------------------
+%                   Sección 4 - Consideraciones técnicas
+%---------------------------------------------------------------------
+\section{Consideraciones técnicas}
+Cómo se compone la aplicación y sus distintos módulos.
+
+\end{document}
