@@ -3,11 +3,16 @@ package fdi.ucm.picday;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Login extends Activity {
 
@@ -19,10 +24,14 @@ public class Login extends Activity {
     private Button login;
     private EditText inputUserName;
     private EditText inputPassword;
+    //Connecting to the database
+    public final static DatabaseConnection database = new DatabaseConnection();
+    public final static Connection conn_db = database.connect_db(); // connection with out database
 
-
+    private final String EXTRA_USER = "username";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -58,10 +67,11 @@ public class Login extends Activity {
         data is not right an error message is shown.
      */
     private void log_in(String user_name, String password) {
-        User user = new User();
-        if (user.log_in(user_name,password)) {
+        User user = new User(user_name,password);
+        if (user.log_in()) {
             login_error.setText("");
             Intent logIntent = new Intent(Login.this, StartPage.class);
+            logIntent.putExtra(EXTRA_USER,user_name);
             startActivity(logIntent);
         }
         else {

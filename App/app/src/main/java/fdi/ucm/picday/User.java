@@ -1,10 +1,18 @@
 package fdi.ucm.picday;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class User {
 
-    private String user_name = "admin";
-    private String email = "admin@admin.com";
-    private String password = "admin";
+    private String user_name;
+    private String email;
+    private String password;
+    private String date;
 
     /*
         Constructor used when trying to log in.
@@ -21,33 +29,70 @@ public class User {
         this.user_name = user_name;
         this.email = email;
         this.password = password;
+        date = today();
     }
 
     public User() {
 
     }
 
-    public boolean log_in(String user_name, String password) {
+    public boolean log_in() {
+        return true;
+        /*
         boolean logged = false;
-        if (user_name.equals(this.user_name) && password.equals(this.password)) { //this will be a DB query (match user/password)
-            logged = true;
-            //load_user_DB(user_name);
+        String query = "SELECT * FROM users WHERE userName='" + user_name + "' AND password='" + password + "'";
+        try {
+            Statement st = Login.conn_db.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            if(rs.next()) {
+                logged = true;
+                email = rs.getString(2);
+                date = rs.getDate(4).toString();
+            }
+        } catch (SQLException e) {
+
         }
-        return logged;
+        return logged;*/
     }
 
-    public int register(String user_name, String email, String password) {
-        int correct;
-        if (user_name.equals(this.user_name)) { //this will be a DB query (search the given user name to see if is already being used)
-            correct = 1;
+    public int register() {
+        int correct = -1;
+        String query = "SELECT * FROM users WHERE userName='" + user_name + "'";
+        String insert = "INSERT INTO users (userName, email, password, date) VALUES (?,?,?,?)";
+        try {
+            Statement st = Login.conn_db.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            if (rs.next()) {
+                correct = 1;
+            }
+        } catch (SQLException e) {
+
         }
-        else if (password.length() < 6) { //check if the password is long enough
+
+        if (password.length() < 6) { //check if the password is long enough
             correct = 2;
         }
-        else {
-            //add_user_DB();
+        else if (correct == -1){
+            try {
+                PreparedStatement pst = Login.conn_db.prepareStatement(insert);
+                pst.setString(1, user_name);
+                pst.setString(2, email);
+                pst.setString(3, password);
+                Date today = new Date();
+                java.sql.Date sqlDate = new java.sql.Date(today.getTime());
+                pst.setDate(4, sqlDate);
+                pst.execute();
+            } catch (SQLException e) {
+
+            }
             correct = 0;
         }
         return correct;
+    }
+
+    private String today() {
+        Date now = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(now);
     }
 }
