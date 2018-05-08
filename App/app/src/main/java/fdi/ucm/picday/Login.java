@@ -25,8 +25,8 @@ public class Login extends Activity {
     private EditText inputUserName;
     private EditText inputPassword;
     //Connecting to the database
-    public final static DatabaseConnection database = new DatabaseConnection();
-    public final static Connection conn_db = database.connect_db(); // connection with out database
+    //public final static DatabaseConnection database = new DatabaseConnection();
+    //public final static Connection conn_db = database.connect_db(); // connection with out database
 
     private final String EXTRA_USER = "username";
     @Override
@@ -68,7 +68,7 @@ public class Login extends Activity {
      */
     private void log_in(String user_name, String password) {
         User user = new User(user_name,password);
-        if (user.log_in()) {
+        if (user.log_in(this)) {
             login_error.setText("");
             Intent logIntent = new Intent(Login.this, StartPage.class);
             logIntent.putExtra(EXTRA_USER,user_name);
