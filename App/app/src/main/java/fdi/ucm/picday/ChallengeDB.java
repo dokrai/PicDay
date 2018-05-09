@@ -49,7 +49,7 @@ public class ChallengeDB {
         ContentValues content = new ContentValues();
         content.put(COL_NAME, challenge.getName());
         content.put(COL_DESCRIPTION, challenge.getDescription());
-        content.put(COL_PICTURES, challenge.getPictures());
+        //content.put(COL_PICTURES, challenge.getPictures());
         return db.insert(TABLE_CHALLENGES,null,content);
     }
 
@@ -57,7 +57,7 @@ public class ChallengeDB {
         ContentValues content = new ContentValues();
         content.put(COL_NAME, challenge.getName());
         content.put(COL_DESCRIPTION, challenge.getDescription());
-        content.put(COL_PICTURES, challenge.getPictures());
+        //content.put(COL_PICTURES, challenge.getPictures());
         return db.update(TABLE_CHALLENGES,content, COL_ID + " = " + id, null);
     }
 
@@ -80,7 +80,7 @@ public class ChallengeDB {
         challenge.setId(cursor.getInt(NUM_COL_ID));
         challenge.setName(cursor.getString(NUM_COL_NAME));
         challenge.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
-        challenge.setPictures(new ArrayList<Picture>());
+        //challenge.setPictures(new ArrayList<Picture>());
         cursor.close();
         return challenge;
     }
@@ -98,7 +98,7 @@ public class ChallengeDB {
             challenge.setId(cursor.getInt(NUM_COL_ID));
             challenge.setName(cursor.getString(NUM_COL_NAME));
             challenge.setDescription(cursor.getString(NUM_COL_DESCRIPTION));
-            challenge.setPictures(new ArrayList<Picture>());
+            //challenge.setPictures(new ArrayList<Picture>());
             challengesList.add(challenge);
         }
         cursor.close();

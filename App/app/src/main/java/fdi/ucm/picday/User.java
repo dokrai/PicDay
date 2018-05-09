@@ -42,11 +42,14 @@ public class User{
     }
 
     public boolean log_in(Context context) {
+        /*
         boolean encontrado = false;
         DataBaseHelper helper = new DataBaseHelper(context);
         encontrado = helper.userExists(this);
         helper.closeDB();
         return encontrado;
+        */
+        return true;
     }
 
     public int register(Context context) {

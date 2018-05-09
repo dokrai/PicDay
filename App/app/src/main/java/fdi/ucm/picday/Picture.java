@@ -4,39 +4,51 @@ import android.media.Image;
 
 public class Picture {
 
-    private Image pic;
-    private User owner;
+    private int id;
+    private String pic;
+    private String owner;
+    private String challenge;
     private double score;
     private int times_scored;
 
-    public Picture(Image pic, User user) {
+    public Picture(String pic, String user) {
         this.pic = pic;
         this.owner = user;
         score = 0;
         times_scored = 0;
     }
 
-    public Picture(Image pic, User user, double score, int times_scored) {
+    public Picture(int id, String pic, String user, String challenge, double score, int times_scored) {
+        this.id = id;
         this.pic = pic;
         this.owner = user;
+        this.challenge = challenge;
         this.score = score;
         this.times_scored = times_scored;
     }
 
-    public Image getPic(){
+    public String getPic(){
         return pic;
     }
 
-    public void setPic(Image image) {
+    public void setPic(String image) {
         pic = image;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User user) {
+    public void setOwner(String user) {
         owner = user;
+    }
+
+    public String getChallenge() {
+        return challenge;
+    }
+
+    public void setChallenge(String chall) {
+        challenge = chall;
     }
 
     public double getScore() {

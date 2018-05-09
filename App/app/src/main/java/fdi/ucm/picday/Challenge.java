@@ -7,16 +7,14 @@ public class Challenge {
     private int id;
     private String name;
     private String description;
-    private ArrayList<Picture> pictures;
 
     public Challenge() {
-        pictures = new ArrayList<Picture>();
+
     }
 
     public Challenge(String name, String desc) {
         this.name = name;
         description = desc;
-        pictures = new ArrayList<Picture>();
     }
 
     public int getId(){
@@ -43,11 +41,4 @@ public class Challenge {
         this.description = description;
     }
 
-    public String getPictures() {
-        return "transformacion";
-    }
-
-    public void setPictures(ArrayList<Picture> pictures) {
-        this.pictures = pictures;
-    }
 }

@@ -50,7 +50,7 @@ public class Register extends Activity {
         String user_email = inputEmail.getText().toString();
         String user_password = inputPassword.getText().toString();
         User user = new User(user_name,user_email,user_password);
-        int correct_registration = user.register();
+        int correct_registration = user.register(this);
         if (correct_registration == 0) {
             registration_error.setText("");
             Intent startIntent = new Intent(Register.this, StartPage.class);
