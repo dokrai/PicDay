@@ -32,6 +32,14 @@ public class User{
     public User() {
 
     }
+    
+      public String getEmail(){
+        return this.email;
+    }
+
+    public String getDate(){
+        return this.date;
+    }
 
     public String getUser_name(){
         return this.user_name;
@@ -42,22 +50,22 @@ public class User{
     }
 
     public boolean log_in(Context context) {
-        /*
         boolean encontrado = false;
         DataBaseHelper helper = new DataBaseHelper(context);
         encontrado = helper.userExists(this);
         helper.closeDB();
         return encontrado;
-        */
-        return true;
     }
 
-    public int register(Context context) {
+     public int register(Context context) {
         DataBaseHelper helper = new DataBaseHelper(context);
-        helper.registerUser(this);
-        return -1;
-    }
+        if (helper.registerUser(this)) {
+            return 0;
+        } else {
+            return -1;
 
+        }
+    }
 
     private String today() {
         Date now = new Date();
