@@ -1,16 +1,11 @@
 package fdi.ucm.picday;
 
-
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
-
-/**
- * Created by Dres on 08/05/2018.
- */
 
 public class DataBaseHelper extends SQLiteOpenHelper{
 
@@ -31,7 +26,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USUARIOS);
-
     }
 
     @Override
@@ -41,20 +35,35 @@ public class DataBaseHelper extends SQLiteOpenHelper{
     }
 
     public boolean userExists(User user){
-        boolean encontrado = true;
         SQLiteDatabase bd = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE user_name = " + user.getUser_name() + " AND password = " + user.getPassword();
+        String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE user_name like '%" + user.getUser_name() + "%' AND password like '%" + user.getPassword() + "%'";
         try{
             Cursor fila = bd.rawQuery(query,null);
+            if(fila.moveToFirst()){
+                return true;
+            }else{
+                return false;
+            }
         }catch(SQLiteException e){
-            encontrado = false;
+            return false;
         }
-        return encontrado;
     }
 
     public boolean registerUser(User user){
         SQLiteDatabase bd = this.getWritableDatabase();
-        return true;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("user_name", user.getUser_name());
+        contentValues.put("password", user.getPassword());
+        contentValues.put("email", user.getEmail());
+        contentValues.put("date", user.getDate());
+
+        long result = bd.insert(TABLE_USUARIOS,null,contentValues);
+
+        if(result == -1){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public void closeDB() {
