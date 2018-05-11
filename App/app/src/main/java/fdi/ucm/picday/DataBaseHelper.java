@@ -34,6 +34,38 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
+     public void guardarImagen(Picture img){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
+        Bitmap bitmap= img.getPic();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+        byte[] blop = baos.toByteArray();
+        SQLiteDatabase bd = this.getWritableDatabase();
+        String sql = "INSERT INTO " + TABLE_FOTOS + "("+ COL_ID_FOTO +"," + COL_IMG + "," + COL_SCORE + "," + COL_TIMES_SCORED + ") VALUES (?,?,?,?)";
+        SQLiteStatement insert = bd.compileStatement(sql);
+        insert.bindDouble(1,img.getId());
+        insert.bindBlob(2,blop);
+        insert.bindDouble(3,img.getScore());
+        insert.bindDouble(4,img.getTimes_scored());
+    }
+
+    public Bitmap buscarImagen(String id){
+        SQLiteDatabase bd = this.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + TABLE_FOTOS + " WHERE id like '%" + id + "%'";
+        Cursor cursor = bd.rawQuery(sql,new String[]{});
+        Bitmap bitmap = null;
+        if(cursor.moveToFirst()){
+            byte[]blop = cursor.getBlob(1);
+            ByteArrayInputStream bais = new ByteArrayInputStream(blop);
+            bitmap = BitmapFactory.decodeStream(bais);
+        }
+        if(cursor != null && !cursor.isClosed()){
+            cursor.close();
+        }
+        bd.close();
+        return bitmap;
+    }    
+    
     public boolean userExists(User user){
         SQLiteDatabase bd = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE user_name like '%" + user.getUser_name() + "%' AND password like '%" + user.getPassword() + "%'";
