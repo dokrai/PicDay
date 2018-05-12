@@ -6,18 +6,63 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class DataBaseHelper extends SQLiteOpenHelper{
 
     //Database Version
-    public static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 1;
     //DataBase name
-    public static final String DATABASE_NAME = "PicDay.db";
+    private static final String DATABASE_NAME = "PicDay.db";
     //DataBase tables
-    public static final String TABLE_USUARIOS="usuarios";
-    public static final String TABLE_CHALLENGES="challenges";
+    private static final String TABLE_USUARIOS="usuarios";
+    private static final String TABLE_CHALLENGES = "challenges";
+    private static final String TABLE_FOTOS="fotos";
+    private static final String TABLE_FOTOS_GUARDADAS="fotosGuardadas";
 
-    private static final String CREATE_TABLE_USUARIOS = "CREATE TABLE " + TABLE_USUARIOS + " (user_name TEXT PRIMARY KEY, email TEXT UNIQUE, password TEXT, date TEXT)";
+    //columnas usuarios
+    private static final String COL_USER_NAME = "user_name";
+    private static final String COL_EMAIL = "email";
+    private static final String COL_PASSWORD = "password";
+    private static final String COL_DATE = "date";
+
+    //columnas challenges
+    private static final String COL_ID_CHALLENGE = "id_challenge";
+    private static final String COL_NAME = "name_challenge";
+    private static final String COL_DESCRIPTION = "desc_challenge";
+    private static final String COL_PICTURES = "pics";
+
+    //columnas fotos
+    private static final String COL_ID_FOTO = "id_foto";
+    private static final String COL_IMG = "img";
+    private static final String COL_OWNER="owner";
+    private static final String COL_PIC_CHALLENGE="pic_challenge";
+    private static final String COL_SCORE = "score_foto";
+    private static final String COL_TIMES_SCORED = "times_scored";
+
+    //columnas fotos guardadas
+    private static final String COL_ID_USUARIO_GUARDADAS="id_user_guardada";
+    private static final String COL_ID_FOTO_GUARDADAS="id_foto_guardada";
+
+    private static final String CREATE_TABLE_USUARIOS = "CREATE TABLE " + TABLE_USUARIOS + " (" + COL_USER_NAME + " TEXT PRIMARY KEY, " + COL_EMAIL
+                                                        + " TEXT UNIQUE, " + COL_PASSWORD + " TEXT, " + COL_DATE + " TEXT)";
+
+    private static final String CREATE_TABLE_CHALLENGES = "CREATE TABLE " + TABLE_CHALLENGES + " (" + COL_ID_CHALLENGE + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                                                        + COL_NAME + " TEXT NOT NULL, " + COL_DESCRIPTION + " TEXT NOT NULL, " + COL_PICTURES + " TEXT NOT NULL);";
+
+    private static final String CREATE_TABLE_FOTOS = "CREATE TABLE " + TABLE_FOTOS + " (" + COL_ID_FOTO + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                                                        + COL_IMG + " BLOB, " + COL_OWNER + "TEXT NOT NULL" + COL_PIC_CHALLENGE + "TEXT NOT NULL" + COL_SCORE
+                                                        + " INTEGER NOT NULL, " + COL_TIMES_SCORED + " INTEGER NOT NULL), FOREIGN KEY (" + COL_OWNER + ") REFERENCES "
+                                                        + TABLE_USUARIOS + "(" + COL_USER_NAME + ");";
+
+    private static final String CREATE_TABLE_GUARDADAS="CREATE TABLE " + TABLE_FOTOS_GUARDADAS + " (" + COL_ID_USUARIO_GUARDADAS + " TEXT PRIMARY KEY, " + COL_ID_FOTO_GUARDADAS
+                                                        + " TEXT UNIQUE, FOREIGN KEY(" + COL_ID_USUARIO_GUARDADAS + ") REFERENCES " + TABLE_USUARIOS +"(" + COL_USER_NAME
+                                                        + "), FOREIGN KEY(" + COL_ID_FOTO_GUARDADAS + ")REFERENCES " + TABLE_FOTOS + "(" + COL_ID_FOTO + "))";
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,15 +71,36 @@ public class DataBaseHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_USUARIOS);
+        db.execSQL(CREATE_TABLE_CHALLENGES);
+        db.execSQL(CREATE_TABLE_FOTOS);
+        db.execSQL(CREATE_TABLE_GUARDADAS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USUARIOS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHALLENGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOTOS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOTOS_GUARDADAS);
         onCreate(db);
     }
 
-     public void guardarImagen(Picture img){
+    public boolean userExists(User user){
+        SQLiteDatabase bd = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE user_name like '%" + user.getUser_name() + "%' AND password like '%" + user.getPassword() + "%'";
+        try{
+            Cursor fila = bd.rawQuery(query,null);
+            if(fila.moveToFirst()){
+                return true;
+            }else{
+                return false;
+            }
+        }catch(SQLiteException e){
+            return false;
+        }
+    }
+
+    public void guardarImagen(Picture img){
         ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
         Bitmap bitmap= img.getPic();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
@@ -64,21 +130,6 @@ public class DataBaseHelper extends SQLiteOpenHelper{
         }
         bd.close();
         return bitmap;
-    }    
-    
-    public boolean userExists(User user){
-        SQLiteDatabase bd = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE user_name like '%" + user.getUser_name() + "%' AND password like '%" + user.getPassword() + "%'";
-        try{
-            Cursor fila = bd.rawQuery(query,null);
-            if(fila.moveToFirst()){
-                return true;
-            }else{
-                return false;
-            }
-        }catch(SQLiteException e){
-            return false;
-        }
     }
 
     public boolean registerUser(User user){
