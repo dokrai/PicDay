@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".Register"></activity>
         <activity android:name=".StartPage"></activity>
+        <activity android:name=".ChallengeActivity"></activity>
     </application>
 
 </manifest>

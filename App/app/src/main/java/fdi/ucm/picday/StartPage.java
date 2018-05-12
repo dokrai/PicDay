@@ -25,7 +25,13 @@ public class StartPage extends Activity {
     private RecyclerView list_challenges;
     private ChallengeAdapter cAdapter;
 
+    //Receiving extra
     private final String EXTRA_USER = "username";
+
+    //Sending extra
+    private final String EXTRA_CID = "challid";
+    private final String EXTRA_CNAME = "challname";
+    private final String EXTRA_DESC = "description";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +57,21 @@ public class StartPage extends Activity {
             @Override
             public void onClick(View view, int position) {
                 Challenge c = challengeList.get(position);
-                Toast.makeText(getApplicationContext(), c.getName() + " is selected!", Toast.LENGTH_SHORT).show();
+                Intent cIntent = new Intent(StartPage.this, ChallengeActivity.class);
+                cIntent.putExtra(EXTRA_CID, c.getId());
+                cIntent.putExtra(EXTRA_CNAME, c.getName());
+                cIntent.putExtra(EXTRA_DESC, c.getDescription());
+                startActivity(cIntent);
             }
 
             @Override
             public void onLongClick(View view, int position) {
                 Challenge c = challengeList.get(position);
-                Toast.makeText(getApplicationContext(), c.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-
+                Intent cIntent = new Intent(StartPage.this, ChallengeActivity.class);
+                cIntent.putExtra(EXTRA_CID, c.getId());
+                cIntent.putExtra(EXTRA_CNAME, c.getName());
+                cIntent.putExtra(EXTRA_DESC, c.getDescription());
+                startActivity(cIntent);
             }
         }));
         loadChallenges();
@@ -67,9 +80,11 @@ public class StartPage extends Activity {
 
     private void loadChallenges() {
         Challenge ht = new Challenge("The Handmaid's Tale","Fotitos distopicas");
+        ht.setId(1);
         challengeList.add(ht);
 
         Challenge groot = new Challenge("Groot","Fotitos de tus bichos favoritos");
+        ht.setId(2);
         challengeList.add(groot);
 
         cAdapter.notifyDataSetChanged();
