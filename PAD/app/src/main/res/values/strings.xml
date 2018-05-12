@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">PicDay</string>
+
+    <string name="nav_profile">Profile</string>
+    <string name="nav_photos">MyPics</string>
+    <string name="nav_rank">Rankings</string>
+    <string name="nav_find">FindPics</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about_us">About Us</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Profile</item>
+        <item>MyPics</item>
+        <item>Rankings</item>
+        <item>FindPics</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string name="activity_title_about_us">About Us</string>
+    <string name="action_logout">Logout</string>
+
+</resources>
