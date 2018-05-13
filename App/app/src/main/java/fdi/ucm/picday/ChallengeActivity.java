@@ -3,6 +3,8 @@ package fdi.ucm.picday;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -50,6 +52,8 @@ public class ChallengeActivity extends Activity {
 
         picsList = new ArrayList<>();
         pic_adapter = new PictureAdapter(this, picsList);
+        /*DataBaseHelper helper = new DataBaseHelper(this);
+        picsList = helper.cargarPicsChallenge(name);*/
 
         list_pics.setLayoutManager(new GridLayoutManager(this, 2));
         list_pics.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
@@ -58,6 +62,7 @@ public class ChallengeActivity extends Activity {
 
 
         challenge_name = (TextView) findViewById(R.id.chal_name);
+        fab = (FloatingActionButton)findViewById(R.id.fab);
         challenge_name.setText(name);
         /*
         challenge_desc = (TextView) findViewById(R.id.chal_desc);
@@ -132,20 +137,27 @@ public class ChallengeActivity extends Activity {
     }
 
     private void loadPics(String name) {
+        Resources res = getApplicationContext().getResources();
+        Bitmap bMap;
         if (name.equals("The Handmaid's Tale")) {
             int[] pics = new int[]{R.drawable.ht1,R.drawable.ht2,R.drawable.ht3,R.drawable.ht4,R.drawable.ht5};
-            Picture p1 = new Picture(pics[0], "ht1", "miamigo", "The Handmain's Tale", 0, 0);
+            bMap = BitmapFactory.decodeResource(res,R.drawable.ht1);
+            Picture p1 = new Picture(pics[0], bMap, "miamigo", "The Handmain's Tale", 0, 0);
             picsList.add(p1);
-            Picture p2 = new Picture(pics[1], "ht2", "yo", "The Handmain's Tale", 2.4, 5);
+            bMap = BitmapFactory.decodeResource(res,R.drawable.ht2);
+            Picture p2 = new Picture(pics[1], bMap, "yo", "The Handmain's Tale", 2.4, 5);
             picsList.add(p2);
-            Picture p3 = new Picture(pics[2], "ht3", "tumama", "The Handmain's Tale", 5, 4);
+            bMap = BitmapFactory.decodeResource(res,R.drawable.ht3);
+            Picture p3 = new Picture(pics[2], bMap, "tumama", "The Handmain's Tale", 5, 4);
             picsList.add(p3);
-            Picture p4 = new Picture(pics[3], "ht4", "iueputa", "The Handmain's Tale", 3, 5);
+            bMap = BitmapFactory.decodeResource(res,R.drawable.ht4);
+            Picture p4 = new Picture(pics[3], bMap, "iueputa", "The Handmain's Tale", 3, 5);
             picsList.add(p4);
-            Picture p5 = new Picture(pics[4], "ht5", "miamigo", "The Handmain's Tale", 4.6, 6);
+            bMap = BitmapFactory.decodeResource(res,R.drawable.ht5);
+            Picture p5 = new Picture(pics[4], bMap, "miamigo", "The Handmain's Tale", 4.6, 6);
             picsList.add(p5);
         }
-        else {
+        /*else {
             int[] pics = new int[]{R.drawable.gr1,R.drawable.gr2,R.drawable.gr3,R.drawable.gr4};
             Picture p1 = new Picture(pics[0], "gr1", "starlord", "Groot", 5, 3);
             picsList.add(p1);
@@ -155,7 +167,7 @@ public class ChallengeActivity extends Activity {
             picsList.add(p3);
             Picture p4 = new Picture(pics[3], "gr4", "rocket", "Groot", 3, 4);
             picsList.add(p4);
-        }
+        }*/
 
         pic_adapter.notifyDataSetChanged();
     }
