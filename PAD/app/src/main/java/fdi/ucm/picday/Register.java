@@ -18,6 +18,8 @@ public class Register extends Activity {
     private EditText inputPassword;
     private TextView registration_error;
 
+    private final String EXTRA_USER = "username";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class Register extends Activity {
         if (correct_registration == 0) {
             registration_error.setText("");
             Intent startIntent = new Intent(Register.this, StartPage.class);
+            startIntent.putExtra(EXTRA_USER,user_name);
             startActivity(startIntent);
         }
         else if (correct_registration == 1) {

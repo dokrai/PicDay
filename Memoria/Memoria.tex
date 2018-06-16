@@ -1,18 +1,30 @@
-\documentclass[11pt]{article}
+\documentclass[11pt,oneside,onecolumn,openany,spanish]{memoir}
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
-\usepackage[spanish]{babel}
+\usepackage[spanish,activeacute]{babel}
+%\usepackage[spanish]{babel}
+\usepackage{tikz} % Required for drawing custom shapes
+\definecolor[named]{color01}{rgb}{.2,.4,.6} % Color used in the title page
+\usepackage{wallpaper} % Required for setting background images (title page)
 \usepackage{graphicx}
 %Título y autores
 \title{PicDay}
 \author{Elena Kaloyanova Popova y Andrés Plaza Hernando}
-\date{2018}
+\newcommand{\aplicacion}{PicDay}
 
 %Comienzo del documento
 \begin{document}
 
 %Mostrar título e índice
-\maketitle
+\ThisCenterWallPaper{1.12}{foto.jpg} % Add the background image, the first argument is the scaling - adjust this as necessary so the image fits the entire page
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [rectangle, rounded corners, fill=white, opacity=0.75, anchor=south west, minimum width=3cm, minimum height=6cm] (box) at (-0.5,-10) (box){}; % White rectangle - "minimum width/height" adjust the width and height of the box; "(-0.5,-10)" adjusts the position on the page
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-0.4cm, text width=2.9cm, font=\sffamily\scriptsize] at (box.north){\aplicacion}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-2cm, text width=2.9cm, font=\sffamily\bfseries\scshape\Large] at (box.north){\thetitle}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-5cm, text width=2.9cm, font=\sffamily\bfseries] at (box.north){\theauthor}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\end{tikzpicture}
+
 \newpage
 \tableofcontents
 \newpage
@@ -20,18 +32,18 @@
 %---------------------------------------------------------------------
 %                   Sección 1 - Manual de instalación
 %---------------------------------------------------------------------
-\section{Manual de Instalación}
+\chapter{Manual de Instalación}
 
 Manual orientado a los aspectos más técnicos de la aplicación.
 
-\subsection{Requisitos mínimos}
+\section{Requisitos mínimos}
 
 A continuación se muestran los distintos requisitos para la utilización de la aplicación.
 
-\subsubsection{Versión de Android mínima}
+\subsection{Versión de Android mínima}
 Se requiere el nivel de API mínima de 22, correspondiente a la versión 5.1 Marshmellow.
 
-\subsubsection{Permisos requeridos}
+\subsection{Permisos requeridos}
 La aplicación precisa de los siguientes permisos:
 \begin{itemize}
 	\item Acceso a la red.
@@ -48,12 +60,12 @@ La aplicación precisa de los siguientes permisos:
 
 En la figura \ref{fig:permisos} se observan los permisos solicitados en el manifiesto de la aplicación.
 
-\subsubsection{Cómo instalar APK}
+\subsection{Cómo instalar APK}
 Una vez comprobado que el dispositivo cumple los requisitos mínimos se puede proceder a la instalación. Para ello hay que permitir la instalación de aplicaciones de origen desconocido en nuestro dispositivo. Para ello accedemos a \textit{Ajustes} y una vez dentro a \textit{Seguridad} donde simplemente hay que marcar la casilla de \textit{Orígenes Desconocidos}.
 
 Ya puede ser instalado el archivo apk de la aplicación.
 
-\subsubsection{Cómo configurar el proyecto en Android Studio}
+\subsection{Cómo configurar el proyecto en Android Studio}
 Primero hay que importar el proyecto de la carpeta "`PicDay"'. Una vez importado hay que incluir las bibliotecas externas que han sido utilizadas a lo largo del desarrollo para que el proyecto compile de forma correcta. Las librerías que hay que importar son las que se observan en la figura \ref{fig:dependencias}. También es necesario importar la librería Volley para la integración con la base de datos.
 
 \begin{figure}
@@ -65,18 +77,18 @@ Primero hay que importar el proyecto de la carpeta "`PicDay"'. Una vez importado
 %---------------------------------------------------------------------
 %                   Sección 2 - Manual de Usuario
 %---------------------------------------------------------------------
-\section{Manual de Usuario}
+\chapter{Manual de Usuario}
 
 Manual orientado al uso de la aplicación.
 
-\subsection{Resumen de la aplicación}
+\section{Resumen de la aplicación}
 PicDay es una aplicación de fotografía que se centra en eventos diarios o de localización. Cada día se abre un nuevo evento temático para que los usuarios suban una fotografía original relacionada con ese tema a un repositorio común, el resto de usuarios valoran las fotos y al final del día el que más puntuación haya recibido es el ganador del evento y sube en el ranking de usuarios. Además de los eventos diarios habrá eventos que se mantendrán siempre abiertos y que también darán puntos a los usuarios según la puntuación que hayan obtenido sus fotos en ellos. Los usuarios también tendrán la opción de buscar retos por localización, se detectarán aquellos retos especiales localizados a menos de 500 metros. Las fotos del respositorio se borran al acabar el día pero en el perfil de cada usuario se guardan las fotos que haya hecho y aquellas que ha marcado como favoritas.
 
-\subsection{Funcionalidades}
+\section{Funcionalidades}
 
 A continuación se muestran las distintas funcionalidades de las que dispone nuestra app, aparte de los típicos formularios de registro e inicio de sesión:
 
-\subsubsection{Página inicial}
+\subsection{Página inicial}
 
 La primera página a la que accede el usuario una vez entra en su sesión es la que muestra la lista de todos los retos disponibles. La interfaz dispone de una barra de navegación inferior compuesta por tres botones que permite al usuario acceder a:
 \begin{itemize}
@@ -87,11 +99,11 @@ La primera página a la que accede el usuario una vez entra en su sesión es la qu
 
 En el extremo derecho de la barra de herramientas el usuario encontrará un botón marcado como una interrogante que le llevará a una sección que le permita ponerse en contacto con nosotros los desarrolladores.
 
-\subsubsection{Página de reto}
+\subsection{Página de reto}
 
 Una vez seleccionado un reto el usuario accederá a una pantalla donde se le muestran todas las fotos que contiene dicho reto. Podrá seleccionar aquella que desee para verla en detalle y valorarla o añadir su propia foto, bien haciéndola en el momento o bien importándola desde su galería de fotos. Si decide hacer la foto en el momento esta se guardará tanto en su perfil como en la memoria interna de su teléfono.
 
-\subsubsection{Página de foto}
+\subsection{Página de foto}
 
 Esta pantalla muestra la foto seleccionada por el usuario, ya sea desde un reto o desde su perfil, junto con el nombre de usuario que la ha hecho. Si la foto no ha sido tomado por él podrá valorarla de 0.5 a 5 estrellas y descargarla a su teléfono. Si es suya únicamente podrá consultar la valoración que tiene.
 
@@ -100,11 +112,11 @@ Tanto esta como las funcionalidades comentadas anteriormente requieren conexión 
 %---------------------------------------------------------------------
 %                   Sección 3 - Diseño
 %---------------------------------------------------------------------
-\section{Diseño}
+\chapter{Diseño}
 
 En esta sección vamos a presentar el proceso de diseño de la aplicación partiendo de los casos de uso para después explicar la arquitectura que va a tener. Para ello vamos a mostrar los diagramas más generales tanto de clase como de secuencia, lo que nos ayudará a la hora de implementar la aplicación.
 
-\subsection{Casos de uso}
+\section{Casos de uso}
 Diseñar los casos de uso nos permite ver la aplicación desde el punto de vista del usuario, lo que nos proporciona unos primeros requisitos que debe cumplir nuestra aplicación.
 
 \begin{figure}
@@ -140,7 +152,7 @@ Dentro de la pantalla que muestra un reto determinado ("`ChallengeActivity"') cu
 
 Por último, la pantalla que contiene la foto en sí y sus detalles ("`PicturePage"') tiene dos casos de uso (Figura \ref{fig:cu_picture}), valorar la foto con desde media a cinco estrellas que aparecen debajo de la foto o descargarla a su telefóno pulsando un botón de descarga. En esta pantalla se muestra también el nombre de usuario del dueño de la foto pero no se puede interactuar con él, es un dato meramente informativo.
 
-\subsection{Diseño de la arquitectura}
+\section{Diseño de la arquitectura}
 
 Nuestra aplicación se sustenta en cuatro clases fundamentales, que nos sirven como modelo. Se puede observar una definición de estas clases en la Figura \ref{fig:cl_generales}.
 
@@ -202,7 +214,7 @@ Lo último que nos queda por comentar es el adaptador de usuarios ("`UserAdapter"
 	\label{fig:cl_user}
 \end{figure}
  
-\subsection{Diagramas de secuencia}
+\section{Diagramas de secuencia}
 En esta sección se mostrarán los diagramas de secuencia para mostrar de forma concisa el funcionamiento de los modulos de los que dispone actualmente la aplicación.
 
 \begin{figure}
@@ -275,7 +287,103 @@ Por último, el formulario de contacto (Figura \ref{fig:sec_about}) es simplement
 %---------------------------------------------------------------------
 %                   Sección 4 - Consideraciones técnicas
 %---------------------------------------------------------------------
-\section{Consideraciones técnicas}
-Cómo se compone la aplicación y sus distintos módulos.
+\chapter{Consideraciones técnicas}
+
+En esta sección explicaremos más en detalle los componentes utilizados en el desarrollo de la aplicación. Hemos creado cinco usuarios para realizar distintas pruebas y a continuación mostraremos capturas de la interfaz explicando cómo se han llevado a cabo las partes más importantes.
+
+En primer lugar, igual que en la mayoría de aplicaciones tenemos un formulario de registro (Figura \ref{fig:cap_reg}) y otro de inicio de sesión (Figura \ref{fig:cap_log}). Ambos formularios se componen de un ImageView con el icono de la aplicación, una serie de EditText para introducir los datos y unos Button para confirmar o cancelar (en el caso del registro). Para pasar al formulario del registro el usuario debe pulsar en el TextView "`JOIN US!"'. Los botones, por su parte son intuitivos.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/register.png}
+    \caption{Captura pantalla de registro.}
+    \label{fig:cap_reg}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/login.png}
+    \caption{Captura pantalla de inicio de sesión.}
+    \label{fig:cap_log}
+\end{figure}
+
+Hemos personalizado el Toolbar para que aparezca el nombre y el icono de la aplicación y se muestre de color rojo que será el principal que utilizaremos.
+
+Una vez dentro de la aplicación el usuario se encuentra, como ya se ha comentado, con la lista de retos (Figura \ref{fig:cap_cha}). La lista está representada gracias a un RecyclerView que utiliza el adaptador de retos ("`ChallengeAdapter"') para representar cada uno de ellos en una tarjeta, definida en el "`challenge\_list\_row.xml"', compuesta por dos TextView: uno con el nombre del reto y otro debajo con la descripción de este. 
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/challenges.png}
+    \caption{Captura pantalla de retos.}
+    \label{fig:cap_cha}
+\end{figure}
+
+Al seleccionar un reto el usuario se encontrará en una pantalla con la lista de las fotos (Figura \ref{fig:cap_dis}) implementada también gracias a un RecyclerView pero con un adaptador diferente ("`PictureAdapter"') que utiliza las tarjetas definidas en "`pic\_card.xml"'. Estas tarjetas, además de dos TextView que representan el nombre del usuario que ha hecho la foto y la puntuación de esta, define un ImageView para mostrar una miniatura de la imagen. Esta vista permite al usuario ver el nombre del reto mediante un TextView y si el reto es diario se le notifica al usuario mediante un Toast (Figura \ref{fig:cap_day}). El usuario podrá desde la pantalla de reto podrá añadir su imagen pulsando en el ImageView del extremo derecho del Toolbar. Esto abrirá la aplicación de cámara del dispositivo tras pedir los permisos necesarios (Figura \ref{fig:cap_cam}) y el usuario podrá realizar una foto desde ella.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/distopia.png}
+    \caption{Captura pantalla del reto "Distopia".}
+    \label{fig:cap_dis}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/daily.png}
+    \caption{Captura pantalla del reto diario "MyJobs".}
+    \label{fig:cap_day}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/camera.png}
+    \caption{Captura solicitud de permisos para usar la cámara.}
+    \label{fig:cap_cam}
+\end{figure}
+
+Una vista en detalle de una foto se puede obtener al seleccionarla desde la pantalla que acabamos de comentar o desde el perfil del usuario. Esta vista detalle consiste en un ImageView que contiene la imagen seleccionada, un RatingBar para mostrar la puntuación de la foto, un TextView que contiene el nombre de usuario del dueño de la foto y un ImageView que se utilizará a modo de botón para la descarga de la imágen.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/picture.png}
+    \caption{Captura pantalla detalle de una foto.}
+    \label{fig:cap_pic}
+\end{figure}
+
+
+La página inicial no sólo contiene la lista de retos si no también accesos al resto de módulos de la aplicación. En la esquina derecha del Toolbar hay un ImageView que representa un signo de interrogación y lleva al usuario a la pantalla de "`Acerca de"' (Figura \ref{fig:cap_web}). Esta vista es un WebView de un index.html que tenemos en el directorio de assets de la aplicación. En la parte inferior hay un BottomNavigationView de tres botones que implementa el menú definido en el "`mainmenu.xml"' del directorio de recursos "`menu"'. Cada uno de estos botones lleva a una seccion distinta:
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/webview.png}
+    \caption{Captura pantalla Acerca De.}
+    \label{fig:cap_web}
+\end{figure}
+
+\begin{itemize}
+	\item \textbf{Perfil} (Figura \ref{fig:cap_pro}): Contiene, al igual que la vista de un reto, una lista de fotos. En este caso las fotos representadas son las que ha hecho el usuario en cuestión. Aparte de las fotos se muestra un TextView con el nombre de usuario.
+	\item \textbf{Ranking} (Figura \ref{fig:cap_ran}): Contiene una lista de usuarios representada mediante un RecyclerView que utiliza el adaptador "`UserAdapter"' para implementar las tarjetas definidas en "`user\_list\_row.xml"'. Estas tarjetas están formadas por un TextView con el nombre del usuario y otro TextView en el extremo opuesto con su puntuación. 
+	\item \textbf{FindPics} (Figura \ref{fig:cap_fin}): Vista idéntica a la que muestra los retos normales, la única diferencia es que sólo aparecen los retos especiales que estén cerca del usuario.
+\end{itemize}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/profile.png}
+    \caption{Captura pantalla de perfil.}
+    \label{fig:cap_pro}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/ranking.png}
+    \caption{Captura pantalla de ranking.}
+    \label{fig:cap_ran}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/findpics.png}
+    \caption{Captura pantalla de retos por cercanía.}
+    \label{fig:cap_fin}
+\end{figure}
+
+
+%---------------------------------------------------------------------
+%                   Sección 5 - Metodología de trabajo y conclusiones
+%---------------------------------------------------------------------
+\chapter{Metodología de trabajo y conclusiones}
+
+Para el desarrollo de la práctica empezamos trabajando juntos para definir los objetivos de la aplicación y realizar el modelado y los diagramas. Una vez tuvimos claro en qué iba a consistir la aplicación y la interfaz que iba a tener abrimos un repositorio en GitHub con la aplicación y la memoria. Hemos contribuido de forma similar en el desarrollo ya que ninguno teníamos experiencia con Android y necesitábamos aprender. Una vez que obtuvimos una versión funcional Andrés se empezó a centrar en crear la base de datos y las consultas necesarias para la aplicación y Elena en depurar la interfaz. Cuando tengamos la base de datos volveremos a juntarnos para realizar la integración entre los dos.
+
+Por ahora, debido a los problemas que nos hemos encontrado a la hora de crear e integrar la base de datos, los datos que utiliza la aplicación están metidos directamente desde el código. Tenemos una base de datos ya creada y gran parte de las consultas pero no hemos tenido tiempo para realizar la integración. Aprovecharemos hasta el día de la entrega para implementar esta parte y todo lo derivado de ella (se reduce el número de extras que le pasamos a los intents, el tratamiento de datos será más limpio y eficiente). También depuraremos ciertas partes. En los elementos pulsables el código está duplicado porque estamos haciendo las pruebas en un emulador y al hacer click nos lo detecta como un "`onLongClick"'. Cuando la aplicación esté acabada y vayamos a lanzarla quitaremos esa parte para implementar otra funcionalidad para el "`onLongClick"'.
 
 \end{document}

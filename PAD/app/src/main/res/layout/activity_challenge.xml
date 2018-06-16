@@ -15,28 +15,35 @@
         android:minHeight="?attr/actionBarSize">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <ImageView
-                android:src="@drawable/icon"
                 android:layout_width="55dp"
-                android:layout_height="55dp" />
+                android:layout_height="match_parent"
+                android:src="@drawable/icon" />
 
             <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="259dp"
+                    android:layout_height="match_parent"
                     android:text="PicDay"
                     android:textAlignment="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:textColor="@color/desc" />
+
+                <ImageView
+                    android:id="@+id/add_pic"
+                    android:clickable="true"
+                    android:src="@drawable/add"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
 
 
             </LinearLayout>
@@ -62,22 +69,18 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_pics"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:color="@color/challenge"
-        android:src="@android:drawable/ic_menu_camera"
-        card_view:backgroundTint="@color/challenge" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_pics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"/>
+
+
+
+
+
 
 </LinearLayout>

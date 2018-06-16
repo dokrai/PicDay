@@ -12,7 +12,8 @@ public class Challenge {
 
     }
 
-    public Challenge(String name, String desc) {
+    public Challenge(int id, String name, String desc) {
+        this.id = id;
         this.name = name;
         description = desc;
     }

@@ -10,7 +10,7 @@ public class User{
     private String email;
     private String password;
     private String date;
-
+    private int points;
     /*
         Constructor used when trying to log in.
      */
@@ -27,6 +27,15 @@ public class User{
         this.email = email;
         this.password = password;
         date = today();
+        points = 0;
+    }
+
+    public User(String user_name, String email, String password, int points){
+        this.user_name = user_name;
+        this.email = email;
+        this.password = password;
+        date = today();
+        this.points = points;
     }
 
     public User() {
@@ -48,6 +57,10 @@ public class User{
     public String getPassword(){
         return this.password;
     }
+
+    public int getPoints() {return this.points;}
+
+    public void setPoints(int points) {this.points = points;}
 
     public boolean log_in(Context context) {
         boolean encontrado = false;
