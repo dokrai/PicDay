@@ -15,8 +15,22 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Profile extends Activity {
@@ -126,8 +140,44 @@ public class Profile extends Activity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private void loadPics(String name) {
-        Resources res = getApplicationContext().getResources();
+    private void loadPics(final String name) {
+        try{
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://192.168.1.40/bdRemota/loadPicsByName.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                JSONArray array = obj.getJSONArray("data");
+                                for(int i = 0; i < array.length();i++){
+                                    JSONObject o = array.getJSONObject(i);
+                                    Picture pic = new Picture(o.getInt("foto_id"),o.getString("img"), o.getString("user_name"),o.getString("challenge_name"),o.getInt("score"),o.getInt("times_scored"));
+                                    myPics.add(pic);
+                                }
+                                pic_adapter.notifyDataSetChanged();
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }){
+                @Override
+                protected Map<String,String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String,String>();
+                    params.put("owner",name);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        /*Resources res = getApplicationContext().getResources();
         Bitmap bMap;
         if (name.equals("dokrai")) {
             int[] pics = new int[]{R.drawable.jobs3, R.drawable.pr1,R.drawable.pr3,R.drawable.dist5,R.drawable.cute2,R.drawable.hobby1};
@@ -158,8 +208,8 @@ public class Profile extends Activity {
             bMap = BitmapFactory.decodeResource(res,R.drawable.pr5);
             Picture p2 = new Picture(pics[1], bMap, "admin", "MyFav T-Shirt", 5, 5);
             myPics.add(p2);
-        }
+        }*/
 
-        pic_adapter.notifyDataSetChanged();
+       //pic_adapter.notifyDataSetChanged();
     }
 }
