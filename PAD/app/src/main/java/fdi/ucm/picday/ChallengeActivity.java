@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,13 +20,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChallengeActivity extends Activity {
 
@@ -36,6 +48,7 @@ public class ChallengeActivity extends Activity {
     private ImageView add;
     private PictureAdapter pic_adapter;
     private List<Picture> picsList;
+    private final int IMG_REQUEST = 1;
 
     private File picFile;
     private Uri picUri;
@@ -49,6 +62,8 @@ public class ChallengeActivity extends Activity {
     private final String EXTRA_OWNER = "username";
     private final String EXTRA_SCORE = "score";
     private final String EXTRA_TIMES = "timesscored";
+    private final String EXTRA_IMAGE = "imageDir";
+
 
     // Activity request codes
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
@@ -92,6 +107,7 @@ public class ChallengeActivity extends Activity {
                 picIntent.putExtra(EXTRA_OWNER, p.getOwner());
                 picIntent.putExtra(EXTRA_SCORE, p.getScore());
                 picIntent.putExtra(EXTRA_TIMES, p.getTimes_scored());
+                picIntent.putExtra(EXTRA_IMAGE,p.getDir());
                 startActivity(picIntent);
             }
 
@@ -103,6 +119,7 @@ public class ChallengeActivity extends Activity {
                 picIntent.putExtra(EXTRA_OWNER, p.getOwner());
                 picIntent.putExtra(EXTRA_SCORE, p.getScore());
                 picIntent.putExtra(EXTRA_TIMES, p.getTimes_scored());
+                picIntent.putExtra(EXTRA_IMAGE,p.getDir());
                 startActivity(picIntent);
             }
         }));
@@ -172,84 +189,43 @@ public class ChallengeActivity extends Activity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private void loadPics(String name) {
-        Resources res = getApplicationContext().getResources();
-        Bitmap bMap;
-        if (name.equals("MyJob")) {
-            Toast.makeText(getApplicationContext(), "Daily Challenge, it would disappear tomorrow!", Toast.LENGTH_LONG).show();
-            int[] pics = new int[]{R.drawable.jobs1,R.drawable.jobs2,R.drawable.jobs3,R.drawable.jobs4,R.drawable.jobs5};
-            bMap = BitmapFactory.decodeResource(res,R.drawable.jobs1);
-            Picture p1 = new Picture(pics[0], bMap, "awar11", "MyJob", 0, 0);
-            picsList.add(p1);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.jobs2);
-            Picture p2 = new Picture(pics[1], bMap, "offred", "MyJob", 2, 5);
-            picsList.add(p2);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.jobs3);
-            Picture p3 = new Picture(pics[2], bMap, "dokrai", "MyJob", 5, 4);
-            picsList.add(p3);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.jobs4);
-            Picture p4 = new Picture(pics[3], bMap, "dewitt", "MyJob", 3, 5);
-            picsList.add(p4);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.jobs5);
-            Picture p5 = new Picture(pics[4], bMap, "dres", "MyJob", 4, 6);
-            picsList.add(p5);
+    private void loadPics(final String name) {
+        try{
+        RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://192.168.1.40/bdRemota/loadPics.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                JSONArray array = obj.getJSONArray("data");
+                                for(int i = 0; i < array.length();i++){
+                                    JSONObject o = array.getJSONObject(i);
+                                    Picture pic = new Picture(o.getInt("foto_id"),o.getString("img"), o.getString("user_name"),o.getString("challenge_name"),o.getInt("score"),o.getInt("times_scored"));
+                                    picsList.add(pic);
+                                }
+                                pic_adapter.notifyDataSetChanged();
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }){
+                @Override
+                protected Map<String,String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String,String>();
+                    params.put("challenge",name);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        else if (name.equals("Distopia")) {
-            int[] pics = new int[]{R.drawable.dist1,R.drawable.dist2,R.drawable.dist3,R.drawable.dist4,R.drawable.dist5};
-            bMap = BitmapFactory.decodeResource(res,R.drawable.dist1);
-            Picture p1 = new Picture(pics[0], bMap, "dres", "Distopia", 3, 1);
-            picsList.add(p1);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.dist2);
-            Picture p2 = new Picture(pics[1], bMap, "offred", "Distopia", 5, 5);
-            picsList.add(p2);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.dist3);
-            Picture p3 = new Picture(pics[2], bMap, "dewitt", "Distopia", 5, 4);
-            picsList.add(p3);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.dist4);
-            Picture p4 = new Picture(pics[3], bMap, "awar11", "Distopia", 3, 5);
-            picsList.add(p4);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.dist5);
-            Picture p5 = new Picture(pics[4], bMap, "dokrai", "Distopia", 4, 6);
-            picsList.add(p5);
-        }
-        else if (name.equals("Cuteness")) {
-            int[] pics = new int[]{R.drawable.cute1,R.drawable.cute2,R.drawable.cute3,R.drawable.cute4,R.drawable.cute5};
-            bMap = BitmapFactory.decodeResource(res,R.drawable.cute1);
-            Picture p1 = new Picture(pics[0], bMap, "dewitt", "Cuteness", 3, 1);
-            picsList.add(p1);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.cute2);
-            Picture p2 = new Picture(pics[1], bMap, "dokrai", "Cuteness", 5, 5);
-            picsList.add(p2);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.cute3);
-            Picture p3 = new Picture(pics[2], bMap, "awar11", "Cuteness", 5, 4);
-            picsList.add(p3);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.cute4);
-            Picture p4 = new Picture(pics[3], bMap, "dres", "Cuteness", 3, 5);
-            picsList.add(p4);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.cute5);
-            Picture p5 = new Picture(pics[4], bMap, "offred", "Cuteness", 4, 6);
-            picsList.add(p5);
-        }
-        else {
-            int[] pics = new int[]{R.drawable.hobby1,R.drawable.hobby2,R.drawable.hobby3,R.drawable.hobby4,R.drawable.hobby5};
-            bMap = BitmapFactory.decodeResource(res,R.drawable.hobby1);
-            Picture p1 = new Picture(pics[0], bMap, "dokrai", "MyHobby", 3, 1);
-            picsList.add(p1);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.hobby2);
-            Picture p2 = new Picture(pics[1], bMap, "awar11", "MyHobby", 5, 5);
-            picsList.add(p2);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.hobby3);
-            Picture p3 = new Picture(pics[2], bMap, "offred", "MyHobby", 5, 4);
-            picsList.add(p3);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.hobby4);
-            Picture p4 = new Picture(pics[3], bMap, "dres", "MyHobby", 3, 5);
-            picsList.add(p4);
-            bMap = BitmapFactory.decodeResource(res,R.drawable.hobby5);
-            Picture p5 = new Picture(pics[4], bMap, "dewitt", "MyHobby", 4, 6);
-            picsList.add(p5);
-        }
-
-        pic_adapter.notifyDataSetChanged();
     }
 
     public Uri getOutputMediaFileUri() {
