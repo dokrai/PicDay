@@ -6,6 +6,7 @@ import android.media.Image;
 public class Picture {
 
     private int id;
+    private String dir;
     private Bitmap pic;
     private String owner;
     private String challenge;
@@ -18,6 +19,14 @@ public class Picture {
         score = 0;
         times_scored = 0;
     }
+   public Picture(int id, String pic, String user, String challenge, float score, int times_scored) {
+        this.id = id;
+        this.dir = pic;
+        this.owner = user;
+        this.challenge = challenge;
+        this.score = score;
+        this.times_scored = times_scored;
+    }
 
     public Picture(int id, Bitmap pic, String user, String challenge, float score, int times_scored) {
         this.id = id;
@@ -27,6 +36,10 @@ public class Picture {
         this.score = score;
         this.times_scored = times_scored;
     }
+
+    public String getDir(){return dir;}
+
+    public void setDir(String dir){this.dir=dir;}
 
     public Bitmap getPic(){
         return pic;
