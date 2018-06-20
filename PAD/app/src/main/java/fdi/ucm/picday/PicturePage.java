@@ -13,6 +13,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.bumptech.glide.Glide;
 
 import java.io.ByteArrayOutputStream;
@@ -32,6 +35,7 @@ public class PicturePage extends Activity {
     private final String EXTRA_OWNER = "username";
     private final String EXTRA_SCORE = "score";
     private final String EXTRA_TIMES = "timesscored";
+    private final String EXTRA_IMAGE = "imageDir";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +47,26 @@ public class PicturePage extends Activity {
         String username = intent.getStringExtra(EXTRA_OWNER);
         final float score = intent.getFloatExtra(EXTRA_SCORE, 0);
         final int times_scored = intent.getIntExtra(EXTRA_TIMES,0);
+        String imageDir = intent.getStringExtra(EXTRA_IMAGE);
 
         Resources res = getApplicationContext().getResources();
         picture = (ImageView) findViewById(R.id.pic);
         final Bitmap bMap = BitmapFactory.decodeResource(res,pid);
         picture.setImageBitmap(bMap);
+
+        final ImageRequest imageRequest = new ImageRequest(imageDir,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        picture.setImageBitmap(response);
+                    }
+                }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        MySingleton.getInstance(this).addToRequestQueue(imageRequest);
 
         user = (TextView) findViewById(R.id.doneBy);
         user.setText(username);
