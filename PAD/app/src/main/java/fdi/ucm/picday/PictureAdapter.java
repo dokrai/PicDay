@@ -49,8 +49,20 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         holder.user_name.setText(pic.getOwner());
         holder.rate.setText(pic.getScore() + "/5.0");
 
-        // loading album cover using Glide library
-        Glide.with(myContext).load(pic.getId()).into(holder.pic);
+      final ImageRequest imageRequest = new ImageRequest(pic.getDir(),
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        holder.pic.setImageBitmap(response);
+
+                    }
+                }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        MySingleton.getInstance(myContext).addToRequestQueue(imageRequest);
     }
 
 
