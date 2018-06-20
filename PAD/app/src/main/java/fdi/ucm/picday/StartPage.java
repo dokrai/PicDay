@@ -21,8 +21,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class StartPage extends Activity {
 
@@ -167,19 +180,35 @@ public class StartPage extends Activity {
     }
 
     private void loadChallenges() {
-        Challenge daily = new Challenge(1,"MyJob","Show everybody your workstation");
-        challengeList.add(daily);
-
-        Challenge dist = new Challenge(1,"Distopia","Share a picture of your favourite distopic world");
-        challengeList.add(dist);
-
-        Challenge cute = new Challenge(2,"Cuteness","Welcome to the world of the cutest creatures!");
-        challengeList.add(cute);
-
-        Challenge hobby = new Challenge(3,"MyHobby","Let us see how you enjoy spending your free time");
-        challengeList.add(hobby);
-
-        cAdapter.notifyDataSetChanged();
+        try{
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://192.168.1.40/bdRemota/loadchallenges.php"; // cuidado que son challenges
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                JSONArray array = obj.getJSONArray("data");
+                                for(int i = 0; i < array.length();i++){
+                                    JSONObject o = array.getJSONObject(i);
+                                    Challenge daily = new Challenge(o.getInt("challenge_id"),o.getString("challenge_name"),o.getString("challenge_des"));
+                                    challengeList.add(daily);
+                                }
+                                cAdapter.notifyDataSetChanged();
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            queue.add(stringRequest);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private class MyLocationListener implements LocationListener {
