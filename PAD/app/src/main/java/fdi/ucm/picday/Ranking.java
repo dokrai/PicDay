@@ -21,6 +21,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,22 +152,36 @@ public class Ranking extends Activity {
     }
 
     private void loadUsers() {
-        User dokrai = new User("dokrai","elena.dokrai@gmail.com","dokrai", 345);
-        userList.add(dokrai);
 
-        User dres = new User("dres","dres1234@gmail.com","holi1234", 322);
-        userList.add(dres);
-
-        User offred = new User("offred","offred@gmail.com","june22", 289);
-        userList.add(offred);
-
-        User awar11 = new User("awar11","awar11@gmail.com","lomalo", 253);
-        userList.add(awar11);
-
-        User dewitt = new User("dewitt","bdewitt@gmail.com","annadw", 200);
-        userList.add(dewitt);
-
-        user_adapter.notifyDataSetChanged();
+        try{
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://192.168.1.40/bdRemota/ranking.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                JSONArray array = obj.getJSONArray("data");
+                                for(int i = 0; i < array.length();i++){
+                                    JSONObject o = array.getJSONObject(i);
+                                    User userScore = new User(o.getString("user_name"),o.getString("email"),o.getString("password"),o.getInt("SUM(score)"));
+                                    userList.add(userScore);
+                                }
+                                user_adapter.notifyDataSetChanged();
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            });
+            queue.add(stringRequest);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private class MyLocationListener implements LocationListener {
