@@ -1,0 +1,20 @@
+\babel@toc {spanish}{}
+\contentsline {chapter}{\'{I}ndice general}{2}
+\contentsline {chapter}{\chapternumberline {1}Manual de Instalación}{3}
+\contentsline {section}{\numberline {1.1}Requisitos mínimos}{3}
+\contentsline {subsection}{Versión de Android mínima}{3}
+\contentsline {subsection}{Permisos requeridos}{3}
+\contentsline {subsection}{Cómo instalar APK}{4}
+\contentsline {subsection}{Cómo configurar el proyecto en Android Studio}{4}
+\contentsline {chapter}{\chapternumberline {2}Manual de Usuario}{5}
+\contentsline {section}{\numberline {2.1}Resumen de la aplicación}{5}
+\contentsline {section}{\numberline {2.2}Funcionalidades}{5}
+\contentsline {subsection}{Página inicial}{5}
+\contentsline {subsection}{Página de reto}{6}
+\contentsline {subsection}{Página de foto}{6}
+\contentsline {chapter}{\chapternumberline {3}Diseño}{7}
+\contentsline {section}{\numberline {3.1}Casos de uso}{7}
+\contentsline {section}{\numberline {3.2}Diseño de la arquitectura}{8}
+\contentsline {section}{\numberline {3.3}Diagramas de secuencia}{16}
+\contentsline {chapter}{\chapternumberline {4}Consideraciones técnicas}{26}
+\contentsline {chapter}{\chapternumberline {5}Metodología de trabajo y conclusiones}{39}

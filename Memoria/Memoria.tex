@@ -1,0 +1,389 @@
+\documentclass[11pt,oneside,onecolumn,openany,spanish]{memoir}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,activeacute]{babel}
+%\usepackage[spanish]{babel}
+\usepackage{tikz} % Required for drawing custom shapes
+\definecolor[named]{color01}{rgb}{.2,.4,.6} % Color used in the title page
+\usepackage{wallpaper} % Required for setting background images (title page)
+\usepackage{graphicx}
+%Título y autores
+\title{PicDay}
+\author{Elena Kaloyanova Popova y Andrés Plaza Hernando}
+\newcommand{\aplicacion}{PicDay}
+
+%Comienzo del documento
+\begin{document}
+
+%Mostrar título e índice
+\ThisCenterWallPaper{1.12}{foto.jpg} % Add the background image, the first argument is the scaling - adjust this as necessary so the image fits the entire page
+
+\begin{tikzpicture}[remember picture,overlay]
+\node [rectangle, rounded corners, fill=white, opacity=0.75, anchor=south west, minimum width=3cm, minimum height=6cm] (box) at (-0.5,-10) (box){}; % White rectangle - "minimum width/height" adjust the width and height of the box; "(-0.5,-10)" adjusts the position on the page
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-0.4cm, text width=2.9cm, font=\sffamily\scriptsize] at (box.north){\aplicacion}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-2cm, text width=2.9cm, font=\sffamily\bfseries\scshape\Large] at (box.north){\thetitle}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\node[anchor=west, color01, xshift=-1.5cm, yshift=-5cm, text width=2.9cm, font=\sffamily\bfseries] at (box.north){\theauthor}; % "Text width" adjusts the wrapping width, "xshift/yshift" adjust the position relative to the white rectangle
+\end{tikzpicture}
+
+\newpage
+\tableofcontents
+\newpage
+
+%---------------------------------------------------------------------
+%                   Sección 1 - Manual de instalación
+%---------------------------------------------------------------------
+\chapter{Manual de Instalación}
+
+Manual orientado a los aspectos más técnicos de la aplicación.
+
+\section{Requisitos mínimos}
+
+A continuación se muestran los distintos requisitos para la utilización de la aplicación.
+
+\subsection{Versión de Android mínima}
+Se requiere el nivel de API mínima de 22, correspondiente a la versión 5.1 Marshmellow.
+
+\subsection{Permisos requeridos}
+La aplicación precisa de los siguientes permisos:
+\begin{itemize}
+	\item Acceso a la red.
+	\item Cámara.
+	\item Galería.
+	\item Ubicación (basada en red y GPS).
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Otros/permisos.png}
+	\caption{Permisos necesarios para la aplicación.}
+	\label{fig:permisos}
+\end{figure}
+
+En la figura \ref{fig:permisos} se observan los permisos solicitados en el manifiesto de la aplicación.
+
+\subsection{Cómo instalar APK}
+Una vez comprobado que el dispositivo cumple los requisitos mínimos se puede proceder a la instalación. Para ello hay que permitir la instalación de aplicaciones de origen desconocido en nuestro dispositivo. Para ello accedemos a \textit{Ajustes} y una vez dentro a \textit{Seguridad} donde simplemente hay que marcar la casilla de \textit{Orígenes Desconocidos}.
+
+Ya puede ser instalado el archivo apk de la aplicación.
+
+\subsection{Cómo configurar el proyecto en Android Studio}
+Primero hay que importar el proyecto de la carpeta "`PicDay"'. Una vez importado hay que incluir las bibliotecas externas que han sido utilizadas a lo largo del desarrollo para que el proyecto compile de forma correcta. Las librerías que hay que importar son las que se observan en la figura \ref{fig:dependencias}. También es necesario importar la librería Volley para la integración con la base de datos.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Otros/dependencias.png}
+	\caption{Dependecias declaradas en el build.gradle de la App.}
+	\label{fig:dependencias}
+\end{figure}
+
+%---------------------------------------------------------------------
+%                   Sección 2 - Manual de Usuario
+%---------------------------------------------------------------------
+\chapter{Manual de Usuario}
+
+Manual orientado al uso de la aplicación.
+
+\section{Resumen de la aplicación}
+PicDay es una aplicación de fotografía que se centra en eventos diarios o de localización. Cada día se abre un nuevo evento temático para que los usuarios suban una fotografía original relacionada con ese tema a un repositorio común, el resto de usuarios valoran las fotos y al final del día el que más puntuación haya recibido es el ganador del evento y sube en el ranking de usuarios. Además de los eventos diarios habrá eventos que se mantendrán siempre abiertos y que también darán puntos a los usuarios según la puntuación que hayan obtenido sus fotos en ellos. Los usuarios también tendrán la opción de buscar retos por localización, se detectarán aquellos retos especiales localizados a menos de 500 metros. Las fotos del respositorio se borran al acabar el día pero en el perfil de cada usuario se guardan las fotos que haya hecho y aquellas que ha marcado como favoritas.
+
+\section{Funcionalidades}
+
+A continuación se muestran las distintas funcionalidades de las que dispone nuestra app, aparte de los típicos formularios de registro e inicio de sesión:
+
+\subsection{Página inicial}
+
+La primera página a la que accede el usuario una vez entra en su sesión es la que muestra la lista de todos los retos disponibles. La interfaz dispone de una barra de navegación inferior compuesta por tres botones que permite al usuario acceder a:
+\begin{itemize}
+	\item Su \textbf{perfil}: Se le mostrará su nombre de usuario y la lista de todas las fotos que haya subido a la aplicacion, incluidas las de los retos diarios.
+	\item \textbf{Buscar retos}: Obtendrá la localización actual del usuario y le llevará a otra página igual que la inicial pero la lista de retos que se muestra estará compuesta por aquellos retos especiales cercanos al usuario (a menos de 500 metros). Consideramos como retos especiales aquellos que se han creado específicamente para una localización concreta y sólo están activos si se está cerca de esta.
+	\item \textbf{Ranking}: Un ranking de usuarios según las puntuaciones que han ido obteniendo.
+\end{itemize}
+
+En el extremo derecho de la barra de herramientas el usuario encontrará un botón marcado como una interrogante que le llevará a una sección que le permita ponerse en contacto con nosotros los desarrolladores.
+
+\subsection{Página de reto}
+
+Una vez seleccionado un reto el usuario accederá a una pantalla donde se le muestran todas las fotos que contiene dicho reto. Podrá seleccionar aquella que desee para verla en detalle y valorarla o añadir su propia foto, bien haciéndola en el momento o bien importándola desde su galería de fotos. Si decide hacer la foto en el momento esta se guardará tanto en su perfil como en la memoria interna de su teléfono.
+
+\subsection{Página de foto}
+
+Esta pantalla muestra la foto seleccionada por el usuario, ya sea desde un reto o desde su perfil, junto con el nombre de usuario que la ha hecho. Si la foto no ha sido tomado por él podrá valorarla de 0.5 a 5 estrellas y descargarla a su teléfono. Si es suya únicamente podrá consultar la valoración que tiene.
+
+Tanto esta como las funcionalidades comentadas anteriormente requieren conexión a Internet para ser accesibles ya que obtienen la información mediante nuestra base de datos que estará almacenada en un servidor. Localmente el usuario podrá ver las fotos hechas por el y aquellas que haya guardado.
+
+%---------------------------------------------------------------------
+%                   Sección 3 - Diseño
+%---------------------------------------------------------------------
+\chapter{Diseño}
+
+En esta sección vamos a presentar el proceso de diseño de la aplicación partiendo de los casos de uso para después explicar la arquitectura que va a tener. Para ello vamos a mostrar los diagramas más generales tanto de clase como de secuencia, lo que nos ayudará a la hora de implementar la aplicación.
+
+\section{Casos de uso}
+Diseñar los casos de uso nos permite ver la aplicación desde el punto de vista del usuario, lo que nos proporciona unos primeros requisitos que debe cumplir nuestra aplicación.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CU_Login.png}
+	\caption{Casos de uso de las pantallas de Login y Register.}
+	\label{fig:cu_login}
+\end{figure}
+
+Comenzamos por lo más básico, registro e inicio de sesión (Figura \ref{fig:cu_login}). Lo primero que se le mostrará al usuario al abrir la aplicación es un formulario de inicio de sesión. Si aún no está registrado podrá hacerlo mediante un formulario al que puede acceder desde la misma pantalla de Login.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CU_Startpage.png}
+	\caption{Casos de uso de la pantalla inicial.}
+	\label{fig:cu_start}
+\end{figure}
+
+Una vez dentro de la aplicación, como ya se ha comentado en la sección inicial, lo primero que se va a encontrar en la pantalla inicial ("`StartPage"') que es la que contiene la mayoría de accesos de la aplicación (Figura \ref{fig:cu_start}). Podrá seleccionar uno de los retos que incluye la lista de retos que gestionamos o buscar retos especiales mediante su localización y nuestra lista de retos especiales. Podrá también acceder a su perfil para ver sus fotos subidas, consultar el ranking de usuarios que incluye la lista de todos los usuarios registrados ordenados por puntuación o contactar con los desarrolladores para obtener más información. Cómo se accede a estas secciones se ha comentado en la Sección 2.2.1.
+
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CU_Challenge.png}
+	\caption{Casos de uso de un reto.}
+	\label{fig:cu_challenge}
+\end{figure}
+
+Dentro de la pantalla que muestra un reto determinado ("`ChallengeActivity"') cuenta con los casos de uso ilustrados en la Figura \ref{fig:cu_challenge}. Se le mostrará al usuario la lista de todas las fotos que pertenecen al reto en cuestión mediante miniaturas acompañadas del nombre de usuario del dueño de la foto y la puntación de esta hasta el momento. El usuario podrá seleccionar una de las fotos o añadir una nueva pulsando en el botón de añadir del extremo derecho de la barra de herramientas.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CU_PicturePage.png}
+	\caption{Casos de uso de una foto.}
+	\label{fig:cu_picture}
+\end{figure}
+
+Por último, la pantalla que contiene la foto en sí y sus detalles ("`PicturePage"') tiene dos casos de uso (Figura \ref{fig:cu_picture}), valorar la foto con desde media a cinco estrellas que aparecen debajo de la foto o descargarla a su telefóno pulsando un botón de descarga. En esta pantalla se muestra también el nombre de usuario del dueño de la foto pero no se puede interactuar con él, es un dato meramente informativo.
+
+\section{Diseño de la arquitectura}
+
+Nuestra aplicación se sustenta en cuatro clases fundamentales, que nos sirven como modelo. Se puede observar una definición de estas clases en la Figura \ref{fig:cl_generales}.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CL_Generales.png}
+	\caption{Clases principales de la aplicación.}
+	\label{fig:cl_generales}
+\end{figure}
+
+Toda nuestra aplicación girará en torno a estas clases:
+
+\begin{itemize}
+	\item \textbf{User}: Representa a los usuarios de la aplicación. Guarda la información típica: nombre de usuario, email y contraseña. Además almacena la fecha de registro del usuario y el número de puntos que ha conseguido hasta el momento.
+	\item \textbf{Challenge}: Representa los retos con los que trabaja la aplicación. Almacena su id (un identificador aleatorio), su nombre, su descripción de no más de 140 caracteres y un booleano que nos permite diferenciar los retos diarios de los persistentes. Además de esta clase, contamos con LocatedChallenge para representar retos. Esta clase hereda de Challenge y lo único que aporta es una localización al reto mediante su longitud y latitud.
+	\item \textbf{Picture}: Representa las fotos que habrá en los distintos retos y en el perfil de los usuarios. Almacena el identificador de la foto, un Bitmap que la represente, su puntuación (de cero a 5) y las veces que ha sido puntuada. Además, guarda el nombre de usuario de la persona que ha hecho la foto y el identificador del reto al que pertenece. Estos dos últimos atributos nos permitirán enlazar todo en nuestra base de datos.
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/ER_General.png}
+	\caption{Diagrama ER general de la aplicación.}
+	\label{fig:er_general}
+\end{figure}
+
+Utilizaremos objetos de estas clases para encapsular las entidades que manejamos en la base de datos. En la figura \ref{fig:er_general} se puede observar el diagrama Entidad-Relación que hemos realizado. Lo implementaremos mediante una base de datos MySql alojada en un servidor, actualmente funciona en local mientras hacemos pruebas, y sobre la que se realizarán consultas con PHP. La librería de HTTP, Volley, nos permitirá integrar las consultas programadas en PHP con Android. Utilizaremos como parte central la tabla "`pictures"' que contendrá todas las fotos almacenadas en nuestro servidor. Como cada foto guarda el nombre de usuario del dueño y el identificador del reto al que pertenece la carga de fotos se realizará de manera simple según estos parámetros: en la pantalla de un determinado reto se cargarán únicamente aquellas fotos cuyo id\_challenge sea igual al id\_challenge del reto (un simple JOIN) y en el perfil de usuario se hará algo similar, sólo se mostrarán las fotos cuyo userName sea igual al userName del usuario. Los retos especiales (Figura \ref{fig:erlocated}) se almacenan en una tabla distinta a los retos normales pero su funcionamiento es igual, la consulta a la tabla "`pictures"' es la misma. Lo único que varía para la tabla "`located\_challenges"' es que sólo se realizan consultas sobre ella si el usuario indica que quiere buscar retos y se utilizan los parámetros adicionales de longitud y latitud para saber si el reto cumple la condición de estar a menos de 500 metros o no.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/ER_Located.png}
+	\caption{Representación de la entidad LocatedChallenge.}
+	\label{fig:erlocated}
+\end{figure}
+
+Gran parte de la información que se mostrará en la aplicación será estará representada mediante listas (RecyclerViews). Para que los elementos se muestren de forma correcta y personalizada necesitamos crear adaptadores para cada una de las clases principales: User, Challenge y Picture. Estos adaptadores serán clases que hereden de RecyclerView.Adapter y nos permitirán personalizar cómo se verán los elementos a la hora de añadirlos a la vista.
+
+Tanto la página inicial ("`StartPage"') como la página de buscar retos ("`FindPics"') muestran listas de retos (Figura \ref{fig:cl_challenge}), la única diferencia es que FindPics muestra sólo los retos especiales cercanos por eso la clase hereda de StartPage para añadirl el atributo de MAX\_DISTANCE que representa los 500 metros de distancia ya mencionado y el método isClose que recibe las coordenadas de la posición del usuario y del reto para hayar la distancia entre ambos y devolver true en caso de que esta sea menor que MAX\_DISTANCE. Ambas clases tienen una barra de navegación inferior, un objeto de tipo BottomNavigationView que implementa un menú de tres elementos. Pinchar en cualquiera de estos tres elementos llevará a otra pantalla: la de perfil, la de FindPics o la del ranking de usuarios. Se trata de transmitir el menor número de información mediante los nuevos Intent: a la actividad Profile y a la de Ranking se les pasa únicamente el nombre del usuario, la de FindPics se le pasan solo las coordenadas de la localización del usuario. A parte de la barra de navegación inferior, las clases también cuentan con un objeto de la clase ImageView que utilizamos a modo de botón, este botón con forma de interrogante llevará al usuario a una pantalla cuyo layout es un WebView que mostrará información sobre la aplicación y los desarrolladores. El objetivo principal de este modulo es que el usuario seleccione un reto después de haber visto su nombre y su descripción para ver las fotos subidas hasta el momento y/o añadir alguna. 
+
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CL_Challenge.png}
+	\caption{Diagramas de clases para la parte de retos.}
+	\label{fig:cl_challenge}
+\end{figure}
+
+Una vez que el usuario ha seleccionado el reto se le mostrará una nueva pantalla con el nombre del reto y todas las fotos que tiene hasta el momento (Figura \ref{fig:cl_picture}). Esta clase y Profile (que hereda de ella) utilizan el adaptador de fotos ("`PictureAdapter"') para mostrar las fotos (combinando RecyclerView y CardView) del reto correspondiente o del usuario respectivamente. A parte de esta lista tendrán un objeto de tipo TextView para mostrar una etiqueta con el nombre del reto en el caso de ChallengeActivity o del usuario en el caso de Profile y otro de tipo ImageView que utilizaremos como botón para que el usuario pueda añadir desde ahí sus nuevas fotos. Pulsar sobre este botón abrirá la cámara del dispositivo y permitirá al usuario hacer la foto. Una vez hecha esta se guardará tanto en el dispositivo de forma local como en nuestra base de datos junto al nombre de usuario del usuario y el id del reto desde el que se ha hecho la foto. Los objetos picFile y picUri permiten el almacenamiento local de la foto. Si la foto se hace desde el perfil en vez de desde un reto se pedirá al usuario que especifique a qué reto quiere añadir la nueva foto. 
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CL_Picture.png}
+	\caption{Diagramas de clases para la parte de fotos.}
+	\label{fig:cl_picture}
+\end{figure}
+
+Si se selecciona una foto desde cualquiera de las dos vistas que acabamos de comentar se iniciará una nueva actividad a la que le pasaremos el identificador de la foto para cargarla y mostrarla junto al nombre de usuario de la persona que la haya hecho y la valoración que tiene.
+La foto se mostrará sobre un ImageView en el que insertaremos el Bipmap de la foto, el nombre de usuario aparecerá sobre un TextView y la valoración se mostrará con mediante un RatingBar de cinco estrellas. En esta pantalla también contará con un objeto ImageView que nos servirá como botón para descargar la imagen al dispositivo del usuario.
+
+Lo último que nos queda por comentar es el adaptador de usuarios ("`UserAdapter"') que será utilizado en la pantalla de Ranking (Figura \ref{fig:cl_user}) que simplemente mostrará los usuario por orden decreciente de puntuación junto a sus puntos. Esta pantalla tiene, al igual que la de StartPage y FindPics, la barra de navegación inferior y el botón de ayuda.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/CL_User.png}
+	\caption{Diagramas de clases para la parte de usuarios.}
+	\label{fig:cl_user}
+\end{figure}
+ 
+\section{Diagramas de secuencia}
+En esta sección se mostrarán los diagramas de secuencia para mostrar de forma concisa el funcionamiento de los modulos de los que dispone actualmente la aplicación.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Register.png}
+	\caption{Diagrama de secuencia del formulario de registro.}
+	\label{fig:sec_register}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Login.png}
+	\caption{Diagrama de secuencia del formulario de Login.}
+	\label{fig:sec_login}
+\end{figure}
+
+En primer lugar, como en toda aplicación tenemos los formularios de registro (Figura \ref{fig:sec_register}) y de inicio de sesión (Figura \ref{fig:sec_login}). Estos se encargarán de coger los datos introducidos por el usuario y acceder a la base de datos para comprobar si son correctos. Si el usuario intenta iniciar sesión se buscará si el nombre introducido existe y la contraseña que le corresponde es la misma que la que ha introducido el usuario. Si todo está bien se autenticará al usuario y se le llevará a la pantalla inicial. Si lo que quiere el usuario es registrarse proporcionará sus datos y, si no hay un usuario con el nombre introducido, se actualizará la base de datos para almacenar al nuevo usuario. De nuevo, si todo ha ido bien se le llevará a la pantalla inicial.
+
+Una vez en la pantalla inicial (Figura \ref{fig:sec_startpage}) se crea la vista tras solicitar a la base de datos la lista de retos normales. Esta pantalla permite al usuario acceder a prácticamente todo el resto de vistas, como ya se ha mencionado: si pulsa en alguno de los retos se le llevará a la ChallengeActivity correspondiente, si pulsa en cualquiera de los botones de la barra de navegación inferior se le llevará a la vista correspondiente (Profile, FindPics y Ranking, de izquierda a derecha) y si pulsa en el icono con forma de interrogación se le llevará al formulario de contacto. A continuación vamos a explorar las posibles vistas y sus diagramas de secuencia correspondientes siguiendo el orden de la figura a la que acabamos de hacer referencia.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Startpage.png}
+	\caption{Diagrama de secuencia de la página inicial.}
+	\label{fig:sec_startpage}
+\end{figure}
+
+Si el usuario selecciona un reto de la lista se le mostrará la lista de fotos que componen dicho reto (Figura \ref{fig:sec_challenge}) tras obtenerla de la base de datos. Dentro de esta vista lo que podrá hacer es seleccionar una de las fotos, lo que le llevará a la vista de PicturePage (Figura \ref{fig:sec_picture}), o pulsar en el icono con forma de aspa para añadir una nueva foto. Si decide añadir una foto se abrirá la cámara del dispositivo (tras comprobar que esta está disponible y tenemos los permisos necesarios para acceder a ella) y el usuario podrá hacer su foto. Una vez hecha se actualiza la base de datos y se recarga la pantalla del reto con la nueva información.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Challenge.png}
+	\caption{Diagrama de secuencia del fomulario de un reto.}
+	\label{fig:sec_challenge}
+\end{figure}
+La vista de PicturePage se creará solicitando a la base de datos la información sobre la foto con el correspondiente identificador. Una vez se le muestre al usuario este puede valorar la foto, lo que provocará una actualización de los atributos "`score"' y "`times\_scored"' en la base de datos, o guardarla en su dispositivo.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Picture.png}
+	\caption{Diagrama de secuencia del formulario de una foto.}
+	\label{fig:sec_picture}
+\end{figure}
+
+En su perfil (Figura \ref{fig:sec_profile}), el usuario verá la lista de las fotos de las que es dueño tras obtenerla de la base de datos. Lo único que puede hacer en esta vista es seleccionar una de las fotos para verla mejor (no podrá valorarla y ya la tiene en su dispositivo local), lo que le llevará a la vista que hemos acabamos de mencionar: PicturePage.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Profile.png}
+	\caption{Diagrama de secuencia del formulario de perfil de usuario.}
+	\label{fig:sec_profile}
+\end{figure}
+
+La vista de FindPics (Figura \ref{fig:sec_findpics}), como ya hemos explicado, es idéntica visualmente a la inicial, lo único que cambia son los retos que se muestran. Antes de acceder a esta vista se le deben pedir permisos al usuario para acceder a su localización, si no se tenían ya. Desde esta vista, al igual que desde la inicial o la de Ranking se puede utilizar la barra de navegación inferior para acceder a otras secciones y el icono de interrogación para contactar con los desarrolladores. La vista de Ranking se encarga, por su parte de obtener la lista de todos los usuarios de la base de datos y los muestra tras clasificarlos por puntuación. Es una lista no interactuable, su objetivo es únicamente mostrar la clasificación.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Findpics.png}
+	\caption{Diagrama de secuencia del formulario de retos especiales.}
+	\label{fig:sec_findpics}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_Ranking.png}
+	\caption{Diagrama de secuencia del formulario de ranking de usuarios.}
+	\label{fig:sec_ranking}
+\end{figure}
+
+Por último, el formulario de contacto (Figura \ref{fig:sec_about}) es simplemente una pequeña página HTML embebida en un WebView donde el usuario puede consultar información sobre la aplicación o los desarrolladores y dispone de unos links para contactar con nosotros en caso de duda o sugerencia.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{Diagramas/SEC_About.png}
+	\caption{Diagrama de secuencia del formulario AboutUs.}
+	\label{fig:sec_about}
+\end{figure}
+
+%---------------------------------------------------------------------
+%                   Sección 4 - Consideraciones técnicas
+%---------------------------------------------------------------------
+\chapter{Consideraciones técnicas}
+
+En esta sección explicaremos más en detalle los componentes utilizados en el desarrollo de la aplicación. Hemos creado cinco usuarios para realizar distintas pruebas y a continuación mostraremos capturas de la interfaz explicando cómo se han llevado a cabo las partes más importantes.
+
+En primer lugar, igual que en la mayoría de aplicaciones tenemos un formulario de registro (Figura \ref{fig:cap_reg}) y otro de inicio de sesión (Figura \ref{fig:cap_log}). Ambos formularios se componen de un ImageView con el icono de la aplicación, una serie de EditText para introducir los datos y unos Button para confirmar o cancelar (en el caso del registro). Para pasar al formulario del registro el usuario debe pulsar en el TextView "`JOIN US!"'. Los botones, por su parte son intuitivos.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/register.png}
+    \caption{Captura pantalla de registro.}
+    \label{fig:cap_reg}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/login.png}
+    \caption{Captura pantalla de inicio de sesión.}
+    \label{fig:cap_log}
+\end{figure}
+
+Hemos personalizado el Toolbar para que aparezca el nombre y el icono de la aplicación y se muestre de color rojo que será el principal que utilizaremos.
+
+Una vez dentro de la aplicación el usuario se encuentra, como ya se ha comentado, con la lista de retos (Figura \ref{fig:cap_cha}). La lista está representada gracias a un RecyclerView que utiliza el adaptador de retos ("`ChallengeAdapter"') para representar cada uno de ellos en una tarjeta, definida en el "`challenge\_list\_row.xml"', compuesta por dos TextView: uno con el nombre del reto y otro debajo con la descripción de este. 
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/challenges.png}
+    \caption{Captura pantalla de retos.}
+    \label{fig:cap_cha}
+\end{figure}
+
+Al seleccionar un reto el usuario se encontrará en una pantalla con la lista de las fotos (Figura \ref{fig:cap_dis}) implementada también gracias a un RecyclerView pero con un adaptador diferente ("`PictureAdapter"') que utiliza las tarjetas definidas en "`pic\_card.xml"'. Estas tarjetas, además de dos TextView que representan el nombre del usuario que ha hecho la foto y la puntuación de esta, define un ImageView para mostrar una miniatura de la imagen. Esta vista permite al usuario ver el nombre del reto mediante un TextView y si el reto es diario se le notifica al usuario mediante un Toast (Figura \ref{fig:cap_day}). El usuario podrá desde la pantalla de reto podrá añadir su imagen pulsando en el ImageView del extremo derecho del Toolbar. Esto abrirá la aplicación de cámara del dispositivo tras pedir los permisos necesarios (Figura \ref{fig:cap_cam}) y el usuario podrá realizar una foto desde ella.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/distopia.png}
+    \caption{Captura pantalla del reto "Distopia".}
+    \label{fig:cap_dis}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/daily.png}
+    \caption{Captura pantalla del reto diario "MyJobs".}
+    \label{fig:cap_day}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/camera.png}
+    \caption{Captura solicitud de permisos para usar la cámara.}
+    \label{fig:cap_cam}
+\end{figure}
+
+Una vista en detalle de una foto se puede obtener al seleccionarla desde la pantalla que acabamos de comentar o desde el perfil del usuario. Esta vista detalle consiste en un ImageView que contiene la imagen seleccionada, un RatingBar para mostrar la puntuación de la foto, un TextView que contiene el nombre de usuario del dueño de la foto y un ImageView que se utilizará a modo de botón para la descarga de la imágen.
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/picture.png}
+    \caption{Captura pantalla detalle de una foto.}
+    \label{fig:cap_pic}
+\end{figure}
+
+
+La página inicial no sólo contiene la lista de retos si no también accesos al resto de módulos de la aplicación. En la esquina derecha del Toolbar hay un ImageView que representa un signo de interrogación y lleva al usuario a la pantalla de "`Acerca de"' (Figura \ref{fig:cap_web}). Esta vista es un WebView de un index.html que tenemos en el directorio de assets de la aplicación. En la parte inferior hay un BottomNavigationView de tres botones que implementa el menú definido en el "`mainmenu.xml"' del directorio de recursos "`menu"'. Cada uno de estos botones lleva a una seccion distinta:
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/webview.png}
+    \caption{Captura pantalla Acerca De.}
+    \label{fig:cap_web}
+\end{figure}
+
+\begin{itemize}
+	\item \textbf{Perfil} (Figura \ref{fig:cap_pro}): Contiene, al igual que la vista de un reto, una lista de fotos. En este caso las fotos representadas son las que ha hecho el usuario en cuestión. Aparte de las fotos se muestra un TextView con el nombre de usuario.
+	\item \textbf{Ranking} (Figura \ref{fig:cap_ran}): Contiene una lista de usuarios representada mediante un RecyclerView que utiliza el adaptador "`UserAdapter"' para implementar las tarjetas definidas en "`user\_list\_row.xml"'. Estas tarjetas están formadas por un TextView con el nombre del usuario y otro TextView en el extremo opuesto con su puntuación. 
+	\item \textbf{FindPics} (Figura \ref{fig:cap_fin}): Vista idéntica a la que muestra los retos normales, la única diferencia es que sólo aparecen los retos especiales que estén cerca del usuario.
+\end{itemize}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/profile.png}
+    \caption{Captura pantalla de perfil.}
+    \label{fig:cap_pro}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/ranking.png}
+    \caption{Captura pantalla de ranking.}
+    \label{fig:cap_ran}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=0.7\textwidth]{Capturas/findpics.png}
+    \caption{Captura pantalla de retos por cercanía.}
+    \label{fig:cap_fin}
+\end{figure}
+
+
+%---------------------------------------------------------------------
+%                   Sección 5 - Metodología de trabajo y conclusiones
+%---------------------------------------------------------------------
+\chapter{Metodología de trabajo y conclusiones}
+
+Para el desarrollo de la práctica empezamos trabajando juntos para definir los objetivos de la aplicación y realizar el modelado y los diagramas. Una vez tuvimos claro en qué iba a consistir la aplicación y la interfaz que iba a tener abrimos un repositorio en GitHub con la aplicación y la memoria. Hemos contribuido de forma similar en el desarrollo ya que ninguno teníamos experiencia con Android y necesitábamos aprender. Una vez que obtuvimos una versión funcional Andrés se empezó a centrar en crear la base de datos y las consultas necesarias para la aplicación y Elena en depurar la interfaz. Cuando tengamos la base de datos volveremos a juntarnos para realizar la integración entre los dos.
+
+Por ahora, debido a los problemas que nos hemos encontrado a la hora de crear e integrar la base de datos, los datos que utiliza la aplicación están metidos directamente desde el código. Tenemos una base de datos ya creada y gran parte de las consultas pero no hemos tenido tiempo para realizar la integración. Aprovecharemos hasta el día de la entrega para implementar esta parte y todo lo derivado de ella (se reduce el número de extras que le pasamos a los intents, el tratamiento de datos será más limpio y eficiente). También depuraremos ciertas partes. En los elementos pulsables el código está duplicado porque estamos haciendo las pruebas en un emulador y al hacer click nos lo detecta como un "`onLongClick"'. Cuando la aplicación esté acabada y vayamos a lanzarla quitaremos esa parte para implementar otra funcionalidad para el "`onLongClick"'.
+
+\end{document}
