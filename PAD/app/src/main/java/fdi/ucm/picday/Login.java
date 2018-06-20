@@ -66,16 +66,49 @@ public class Login extends Activity {
         Checks the given name and password and, if correct, leads to the start page. If the given
         data is not right an error message is shown.
      */
-    private void log_in(String user_name, String password) {
-        User user = new User(user_name,password);
-        if (user.log_in(this)) {
-            login_error.setText("");
-            Intent logIntent = new Intent(Login.this, StartPage.class);
-            logIntent.putExtra(EXTRA_USER,user_name);
-            startActivity(logIntent);
-        }
-        else {
-            login_error.setText("Invalid UserName or Password!");
+     private void log_in(final String user_name, String password) {
+        try {
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://192.168.1.40/bdRemota/loginUser.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject obj = new JSONObject(response);
+                                boolean success= obj.getBoolean("success");
+                                if(success){
+                                    login_error.setText("");
+                                    Intent logIntent = new Intent(Login.this, StartPage.class);
+                                    logIntent.putExtra(EXTRA_USER,user_name);
+                                    startActivity(logIntent);
+                                }else{
+                                    login_error.setText("Invalid UserName or Password!");
+                                }
+                            }catch(JSONException e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    login_error.setText("Hubo un error al registrar" + error);
+                }
+            }){
+                @Override
+                protected Map<String,String> getParams() throws AuthFailureError {
+                    Map<String,String> params = new HashMap<String,String>();
+                    String name = inputUserName.getText().toString();
+                    String password = inputPassword.getText().toString();
+                    params.put("name",name);
+                    params.put("password",password);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
